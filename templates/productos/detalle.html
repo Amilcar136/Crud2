@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Producto{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Detalles del Producto</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">{{ producto.nombre }}</h4>
+        <hr>
+        <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+        <p><strong>Categoría:</strong> {{ producto.get_categoria_display }}</p>
+        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+        <p><strong>Stock:</strong> {{ producto.stock }} unidades</p>
+        <p><strong>Fecha de creación:</strong> {{ producto.fecha_creacion|date:"d/m/Y H:i" }}</p>
+        <p><strong>Última actualización:</strong> {{ producto.fecha_actualizacion|date:"d/m/Y H:i" }}</p>
+        
+        <div class="mt-4">
+            <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Volver</a>
+            {% if user.is_superuser or user.is_staff %}
+                <a href="{% url 'productos:editar' producto.pk %}" class="btn btn-warning">Editar</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

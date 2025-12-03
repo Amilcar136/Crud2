@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Crear Producto{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Crear Nuevo Producto</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" id="productoForm">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#id_nombre').on('blur', function() {
+        var nombre = $(this).val();
+        if (nombre) {
+            $.ajax({
+                url: '{% url "productos:validar_ajax" %}',
+                data: { 'nombre': nombre },
+                success: function(data) {
+                    if (data.existe) {
+                        alert('Ya existe un producto con ese nombre');
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
